@@ -37,6 +37,22 @@ objects:
           app: oracle12c
           deploymentconfig: oracle12c
       spec:
+        initContainers:
+        - command:
+            - sh
+            - '-c'
+            - (chgrp -R 54321 /ORCL)
+          image: alpine
+          imagePullPolicy: Always
+          name: volume-permission-fixer
+          resources: {}
+          securityContext:
+            runAsUser: 0
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /ORCL
+            name: orcl
         containers:
         - name: oracle12c
           imagePullPolicy: Always
